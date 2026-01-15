@@ -1,3 +1,7 @@
+import os
+import json
+from mdutils import MdUtils
+
 
 # 从用户登录返回的职业列表中获取老师职业信息(任职那些学校)
 def get_teacher_type(user_types):
@@ -20,3 +24,11 @@ def get_selected_org(org_list):
     except (ValueError, IndexError):
         print("❌ 输入无效，未选择任何学校")
         return None
+
+def save_as_md(title,json_temp):
+    file_path = os.path.join("report", title) # 在传入之前，先用 json 库把字典“序列化”为字符串
+    json_str = json.dumps(json_temp, indent=4, ensure_ascii=False)
+    mdFile = MdUtils(file_name=file_path)
+    mdFile.new_header(level=1, title=title)
+    mdFile.insert_code(json_str, language='json')
+    mdFile.create_md_file()
