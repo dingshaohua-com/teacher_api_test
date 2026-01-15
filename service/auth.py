@@ -1,13 +1,13 @@
-from utils.api_helper.common_api import common_api
+from utils.api_helper.ucenter_api import ucenter_api
 import os
 
 
 def login():
-    data = {
+    json_data = {
         "userPhone": os.getenv('ACCOUNT'),
         "verifyCode": os.getenv('VERIFYCODE'),
         "clientTypeId":1,
         "loginTypeId":1,
         "platformId":2
     }
-    return common_api.post("/access/login", json=data)
+    return ucenter_api.post("/access/login", json=json_data)
