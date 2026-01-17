@@ -8,12 +8,8 @@ ucenter_api = ApiClient(host=os.getenv('HOST'), base_url=os.getenv('UCENTER_BASE
 
 # 定义请求拦截器：注入 Token
 def request_interceptor(url, kwargs):
-    # kwargs.setdefault('headers', {})
-    # kwargs['headers']['Authorization'] = 'Bearer YOUR_TOKEN'
-    # print(f"DEBUG: 发送请求到 {url}")
     # 如果 context 里存的是一个对象，可以这样拿
     token = getattr(context, 'token', None)
-
     if token:
         headers = kwargs.setdefault('headers', {}) # 如果有，就拿来用；如果没有，就初始化一个
         headers['Authorization'] = f"Bearer {token}"
@@ -37,7 +33,6 @@ def response_interceptor(response):
     else:
         print(f"ERROR: 请求错误 {response.status_code}")
         return response
-
 
 # 注册拦截器
 ucenter_api.interceptors['request'].append(request_interceptor)
