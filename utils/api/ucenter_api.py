@@ -1,6 +1,6 @@
 import os
-from utils.api_helper.api_client import ApiClient
-from utils import context
+from utils.api.api_client import ApiClient
+from utils import store
 from utils.common import get_teacher_type, get_selected_org
 
 # 实例化
@@ -9,7 +9,7 @@ ucenter_api = ApiClient(host=os.getenv('HOST'), base_url=os.getenv('UCENTER_BASE
 # 定义请求拦截器：注入 Token
 def request_interceptor(url, kwargs):
     # 如果 context 里存的是一个对象，可以这样拿
-    token = getattr(context, 'token', None)
+    token = getattr(store, 'token', None)
     if token:
         headers = kwargs.setdefault('headers', {}) # 如果有，就拿来用；如果没有，就初始化一个
         headers['Authorization'] = f"Bearer {token}"
@@ -22,11 +22,11 @@ def response_interceptor(response):
         if '/login' in response.request.url:
             token = res.get('token')
             if token:
-                context.token=token
-                context.user=res.get('user')
-                teacher_type = get_teacher_type(context.user['userTypes'])
-                context.organization = get_selected_org(teacher_type['organizationList'])
-                print(f'用户选择了：{context.organization['organizationName']}')
+                store.token=token
+                store.user=res.get('user')
+                teacher_type = get_teacher_type(store.user['userTypes'])
+                store.organization = get_selected_org(teacher_type['organizationList'])
+                print(f'用户选择了：{store.organization['organizationName']}')
             else:
                 raise Exception('登录异常')
         return res

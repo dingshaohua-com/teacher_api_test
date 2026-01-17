@@ -1,4 +1,4 @@
-from utils.api_helper.ucenter_api import ucenter_api
+from utils.api.ucenter_api import ucenter_api
 import os
 
 

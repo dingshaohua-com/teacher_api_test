@@ -5,9 +5,9 @@ from mdutils import MdUtils
 # 从用户登录返回的职业列表中获取老师职业信息(任职那些学校)
 def get_teacher_type(user_types):
     teacher_type = {}
-    teacher_typeId=2
+    teacher_type_id=2
     for user_type in user_types:
-        if user_type['userTypeId'] == teacher_typeId:
+        if user_type['userTypeId'] == teacher_type_id:
             teacher_type=user_type
     return teacher_type
 

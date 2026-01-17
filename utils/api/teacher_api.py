@@ -1,17 +1,17 @@
 import os
-from utils.api_helper.api_client import ApiClient
-from utils import context
+from utils.api.api_client import ApiClient
+from utils import store
 
 # 实例化
 teacher_api = ApiClient(host=os.getenv('HOST'), base_url=os.getenv('TEACHER_BASE_URL'))
 
 # 定义请求拦截器：注入 Token
 def request_interceptor(url, kwargs):
-    token = getattr(context, 'token', None)
+    token = getattr(store, 'token', None)
     if token:
         headers = kwargs.setdefault('headers', {})  # 如果有，就拿来用；如果没有，就初始化一个
         headers['Authorization'] = f"Bearer {token}"
-        headers['organizationid'] = str(context.organization['organizationId'])
+        headers['organizationid'] = str(store.organization['organizationId'])
     return url, kwargs
 
 # 定义响应拦截器：自动解析 JSON 或错误处理
